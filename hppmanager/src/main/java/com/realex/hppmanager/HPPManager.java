@@ -145,4 +145,8 @@ public class HPPManager extends HppResponse {
 
         return map;
     }
+
+    public void setSupplementaryData(String key, String value) {
+        supplementaryData.put(key,value);
+    }
 }
