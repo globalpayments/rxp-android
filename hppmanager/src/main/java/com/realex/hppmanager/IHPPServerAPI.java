@@ -15,7 +15,7 @@ public interface IHPPServerAPI {
     @FormUrlEncoded
         @POST("/{path}")
         public void getHPPRequest(@Path(value = "path", encode = false) String path, @FieldMap HashMap<String, String> args,
-                                  Callback<HppResponse> callback);
+                                  Callback<HPPResponse> callback);
 
         @FormUrlEncoded
         @POST("/{path}")

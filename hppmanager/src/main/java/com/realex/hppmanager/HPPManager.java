@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import java.util.HashMap;
 
-public class HPPManager extends HppResponse {
+public class HPPManager extends HPPResponse {
 
     public static final String RESULT_MESSAGE = "RESULT_MESSAGE";
 

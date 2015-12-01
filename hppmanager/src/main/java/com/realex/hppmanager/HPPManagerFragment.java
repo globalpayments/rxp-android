@@ -8,8 +8,6 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Base64;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +38,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 
-public class HPPManagerFragment extends Fragment implements Callback<HppResponse> {
+public class HPPManagerFragment extends Fragment implements Callback<HPPResponse> {
 
     private HPPManagerListener mListener;
     private View root;
@@ -120,7 +118,7 @@ public class HPPManagerFragment extends Fragment implements Callback<HppResponse
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    public void success(HppResponse hppResponse, Response response) {
+    public void success(HPPResponse hppResponse, Response response) {
 
         final WebView webView = (WebView) root.findViewById(R.id.hpp_web_view);
 

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 
-public class HppResponse {
+public class HPPResponse {
 
     public static final String MERCHANT_ID = "MERCHANT_ID";
     public static final String ACCOUNT = "ACCOUNT";
