@@ -150,8 +150,6 @@ public class HPPManagerFragment extends Fragment implements Callback<HppResponse
 
                     callbackHandler(msg, hppManager.getHppURL());
 
-                    Log.d("TEST", msg);
-
                     return true;
                 }
 
@@ -259,21 +257,8 @@ public class HPPManagerFragment extends Fragment implements Callback<HppResponse
         try {
 
             String postData = null;
-
-            if (hppManager.isLightBox()) {
-                postData = format(nvps, true)
-                        + QP_SEP_A + "MERCHANT_RESPONSE_URL" + NAME_VALUE_SEPARATOR + Base64.encodeToString(
-                        hppManager.getHppResponseConsumerURL().getBytes(), 0);
-            } else {
-                nvps.add(new BasicNameValuePair("MERCHANT_RESPONSE_URL", hppManager.getHppResponseConsumerURL()));
-                postData = format(nvps, true);
-            }
-
+            postData = format(nvps, true);
             webView.addJavascriptInterface(this, "HppManager");
-
-            Log.d("", hppManager.getHppURL());
-            Log.d("", postData);
-
             webView.postUrl(hppManager.getHppURL(), postData.getBytes());
 
         } catch (UnsupportedEncodingException e) {
