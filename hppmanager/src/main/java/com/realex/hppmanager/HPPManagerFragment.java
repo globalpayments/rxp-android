@@ -107,14 +107,17 @@ public class HPPManagerFragment extends Fragment implements Callback<HPPResponse
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
         if (!isResultReceived) {
             mListener.hppManagerCancelled();
             isResultReceived = true;
         }
         mListener = null;
+
+        super.onDestroy();
     }
+
+
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
