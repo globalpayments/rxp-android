@@ -1,5 +1,8 @@
 package com.realex.hppmanager;
 
+/**
+ * HPPError represents runtime exceptions
+ */
 public class HPPError extends RuntimeException{
 
     private final String url;

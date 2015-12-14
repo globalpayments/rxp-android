@@ -10,7 +10,11 @@ import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
 import retrofit.http.Path;
 
-public interface IHPPServerAPI {
+/**
+ * Declaration of the server api
+ */
+
+interface IHPPServerAPI {
 
     @FormUrlEncoded
         @POST("/{path}")

@@ -1,30 +1,8 @@
 package com.realex.realexremote;
 
-    /*
-     * Validate Expiry Date Not In Past. Also runs checks from
-     * validateExpiryDateFormat.
-var validateExpiryDateNotInPast = function(expiryDate) {
-        // test valid format
-        if (!validateExpiryDateFormat(expiryDate)) {
-        return false;
-        }
-
-        var month = parseInt(expiryDate.substring(0, 2), 10);
-        var year = parseInt(expiryDate.substring(2, 4), 10);
-
-        // test date is not in the past
-        var now = new Date();
-        var currentMonth = now.getMonth() + 1;
-        var currentYear = now.getFullYear();
-        if (year < (currentYear % 100)) {
-        return false;
-        } else if (year === (currentYear % 100) && month < currentMonth) {
-        return false;
-        }
-
-        return true;
-        };
-     */
+/*
+    Validate Expiry Date Not In Past. Also runs checks from validateExpiryDateFormat.
+ */
 
 import java.util.Calendar;
 

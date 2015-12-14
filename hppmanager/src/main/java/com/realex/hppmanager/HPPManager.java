@@ -5,6 +5,36 @@ import android.os.Bundle;
 
 import java.util.HashMap;
 
+/**
+ * The main object the host app creates.
+
+ The HPP Manager requires three server URLs.
+ 1) The request producer which takes the request from the component and encodes it using the shared secret stored on the server side
+ 2) The HPP server where the component sends the encoded request
+ 3) The response consumer which takes the encoded response received back from HPP
+
+ You set these three URLs as follows;
+
+ hppManager.setHppRequestProducerURL("http://myserver.com/HPP_Request_Producer.php");
+
+ hppManager.setHppResponseConsumerURL("http://myserver.com/HPP_Response_Consumer.php"");
+ 
+ hppManager.setHppURL("https://hpp.test.realexpayments.com/pay";
+
+ Set HPP Properties
+
+ hppManager.setMerchantId("realexsandbox");
+ 
+ hppManager.setAccount("internet");
+ 
+ hppManager.setAmount("100");
+ 
+ hppManager.setCurrency("EUR");
+
+ it is also possible to set options by createFromBundle function
+
+
+ */
 public class HPPManager extends HPPResponse {
 
     public static final String RESULT_MESSAGE = "RESULT_MESSAGE";
@@ -17,6 +47,7 @@ public class HPPManager extends HPPResponse {
     private String hppResponseConsumerURL = "";
     private String hppURL = "https://hpp.realexpayments.com/pay";
 
+    //Supplementary data to be sent to Realex Payments. This will be returned in the HPP response.
     private HashMap<String, String> supplementaryData = new HashMap<String, String>();
 
 
@@ -26,30 +57,77 @@ public class HPPManager extends HPPResponse {
 
     private static boolean lightBox = true;
 
+    /**
+     *
+     * @return hpp request producer url
+     */
     public String getHppRequestProducerURL() {
         return hppRequestProducerURL;
     }
 
+    /**
+     * The request producer which takes the request from the component and encodes it using the shared secret stored on the server side.
+     *
+     * @param hppRequestProducerURL to set
+     */
     public void setHppRequestProducerURL(String hppRequestProducerURL) {
         this.hppRequestProducerURL = hppRequestProducerURL;
     }
 
+    /**
+     *
+     * @return hpp response consumer url
+     */
     public String getHppResponseConsumerURL() {
         return hppResponseConsumerURL;
     }
 
+    /**
+     * The response consumer which takes the encoded response received back from HPP.
+     *
+     * @param hppResponseConsumerURL to set
+     */
     public void setHppResponseConsumerURL(String hppResponseConsumerURL) {
         this.hppResponseConsumerURL = hppResponseConsumerURL;
     }
 
+    /**
+     *
+     * @return hpp url
+     */
     public String getHppURL() {
         return hppURL;
     }
 
+    /**
+     * The HPP server where the component sends the encoded request.
+     *
+     * @param hppURL to set
+     */
     public void setHppURL(String hppURL) {
         this.hppURL = hppURL;
     }
 
+    /**
+     * initialize HPPManager from argument
+     *
+         Bundle args = new Bundle();
+
+         args.putString(HPPManager.HPPREQUEST_PRODUCER_URL, "http://myserver.com/HPP_Request_Producer.php");
+         args.putString(HPPManager.HPPRESPONSE_CONSUMER_URL, "http://myserver.com/HPP_Response_Consumer.php");
+         args.putString(HPPManager.HPPURL, "https://hpp.test.realexpayments.com/pay");
+         args.putString(HPPManager.MERCHANT_ID, "realexsandbox");
+         args.putString(HPPManager.AMOUNT, "100");
+         args.putString(HPPManager.CURRENCY, "EUR");
+         args.putString(HPPManager.ACCOUNT, "internet");
+
+         hppManager = hppManager.createFromBundle(args);
+
+     *
+     *
+     * @param arg Bundle with arguments
+     * @return
+     */
     public static HPPManager createFromBundle(Bundle arg) {
 
         HPPManager hppManager = new HPPManager();
@@ -89,6 +167,10 @@ public class HPPManager extends HPPResponse {
         return hppManager;
     }
 
+    /**
+     *
+     * @return Fragment that present payment form
+     */
     public Fragment newInstance() {
         HPPManagerFragment fragment = new HPPManagerFragment();
         Bundle args = new Bundle();
@@ -135,6 +217,10 @@ public class HPPManager extends HPPResponse {
         return fragment;
     }
 
+    /**
+     *
+     * @return dictionary of parameters
+     */
     @Override
     public HashMap<String, String> getMap() {
         HashMap<String, String> map = super.getMap();
@@ -146,6 +232,11 @@ public class HPPManager extends HPPResponse {
         return map;
     }
 
+    /**
+     * in addition to the predefined properties, you can add any amount of additional arbitrary properties
+     * @param key
+     * @param value
+     */
     public void setSupplementaryData(String key, String value) {
         supplementaryData.put(key,value);
     }

@@ -38,6 +38,15 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 
+/**
+ * Payment form fragment.
+ *
+    Insert the HppManager fragment into your activity as follows;
+    Fragment hppManagerFragment = hppManager.newInstance();  
+    getFragmentManager() .beginTransaction().add(R.id.container,hppManagerFrament) .commit();
+
+ **/
+
 public class HPPManagerFragment extends Fragment implements Callback<HPPResponse> {
 
     private HPPManagerListener mListener;

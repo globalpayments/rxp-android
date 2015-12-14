@@ -8,7 +8,10 @@ import retrofit.RestAdapter;
 import retrofit.android.AndroidLog;
 import retrofit.converter.GsonConverter;
 
-public class ApiAdapter {
+/**
+ * Helper class for server communication
+ */
+class ApiAdapter {
 
     public static final String RETROFIT_TAG = "HPPRetrofit";
 

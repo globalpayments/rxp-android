@@ -1,17 +1,8 @@
 package com.realex.realexremote;
 
-    /*
-     * Validate Amex CVN. Applies to Amex card types. Only allows 4 numeric
-     * characters.
-var validateAmexCvn = function(cvn) {
-        // test numeric length 4
-        if (!/^\d{4}$/.test(cvn)) {
-        return false;
-        }
-
-        return true;
-        };
-     */
+/*
+    Validate Amex CVN. Applies to Amex card types. Only allows 4 numeric characters.
+    */
 
 public class ValidateAmexCvn {
 
