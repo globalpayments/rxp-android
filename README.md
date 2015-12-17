@@ -8,29 +8,7 @@ You can find more information on how to use this SDK and sign up for a free Real
 
 ## Installation
 
-### Gradle
-
-Add this dependency to your project's build file:
-
-```
-compile "com.realexpayments.hpp.sdk:rxp-android:1.0.0"
-```
-
-### Maven
-
-Add this dependency to your project's POM:
-
-```
-<dependency>
-	<groupId>com.realexpayments.hpp.sdk</groupId>
-	<artifactId>rxp-android</artifactId>
-	<version>1.0.0</version>
-</dependency>
-```
-
-### Manual
-
-If you prefer not to use a dependency manager, you can integrate the Realex Payments Android SDK into your project manually.
+You can integrate the Realex Payments Android SDK into your project manually.
 
 - Download the the latest release from GitHub:
 
