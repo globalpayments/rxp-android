@@ -23,15 +23,20 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -47,7 +52,7 @@ import retrofit.mime.TypedByteArray;
 
  **/
 
-public class HPPManagerFragment extends Fragment implements Callback<HPPResponse> {
+public class HPPManagerFragment extends Fragment implements Callback<Response> {
 
     private HPPManagerListener mListener;
     private View root;
@@ -130,7 +135,7 @@ public class HPPManagerFragment extends Fragment implements Callback<HPPResponse
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    public void success(HPPResponse hppResponse, Response response) {
+    public void success(Response hppResponse, Response response) {
 
         final WebView webView = (WebView) root.findViewById(R.id.hpp_web_view);
 
@@ -244,9 +249,13 @@ public class HPPManagerFragment extends Fragment implements Callback<HPPResponse
 
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
 
-        HashMap<String, String> params = hppManager.getMap();
 
-        HashMap<String, String> consumer_response_params = hppResponse.getMap();
+        String resp = new String(((TypedByteArray) response.getBody()).getBytes());
+
+        HashMap<String, String> params = new HashMap<>();//hppManager.getMap();
+
+        Type mapType = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> consumer_response_params = new Gson().fromJson(resp, mapType);
 
         //merge params
         for (String key : consumer_response_params.keySet()) {
