@@ -4,7 +4,7 @@ You can find more information on how to use this SDK and sign up for a free Real
 ## Requirements
 
 - Android 4.4+
-- Android SDK 14 or later
+- Android SDK 19 or later
 
 ## Installation
 
