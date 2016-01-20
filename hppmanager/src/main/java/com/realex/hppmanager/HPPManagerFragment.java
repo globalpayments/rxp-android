@@ -1,5 +1,6 @@
 package com.realex.hppmanager;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
@@ -212,6 +213,7 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
                                          }, 100);
                                      }
 
+                                     @SuppressLint("NewApi")
                                      @Override
                                      public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                                          super.onReceivedHttpError(view, request, errorResponse);
@@ -224,6 +226,7 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
 
                                      }
 
+                                     @SuppressLint("NewApi")
                                      @Override
                                      public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
 
