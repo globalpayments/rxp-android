@@ -14,8 +14,8 @@ You can integrate the Realex Payments Android SDK into your project manually.
 
 https://github.com/realexpayments/rxp-android/releases
 
-- Add module 'hppmanager' into your project to use the HPP SDK.
-- If you want to use the card data validation library, add the module 'realexremote' into your project.
+- Add module 'rxp-hpp-android' into your project to use the HPP SDK.
+- If you want to use the card data validation library, add the module 'rxp-remote-android' into your project.
 
 
 ## Using the HPP SDK
