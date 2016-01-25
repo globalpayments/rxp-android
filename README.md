@@ -4,9 +4,27 @@ You can find more information on how to use this SDK and sign up for a free Real
 ## Requirements
 
 - Android 4.4+
-- Android SDK 14 or later
+- Android SDK 19 or later
 
-## Installation
+## HPP SDK Installation
+
+### Gradle users
+Add this dependency to your project's build file:
+```
+compile "com.realexpayments.hpp.sdk:rxp-hpp-android:1.0"
+```
+
+### Maven users
+Add this dependency to your project's POM:
+```xml
+<dependency>
+  <groupId>com.realexpayments.hpp.sdk</groupId>
+  <artifactId>rxp-hpp-android</artifactId>
+  <version>1.0</version>
+</dependency>
+```
+
+### Manual
 
 You can integrate the Realex Payments Android SDK into your project manually.
 
@@ -14,9 +32,8 @@ You can integrate the Realex Payments Android SDK into your project manually.
 
 https://github.com/realexpayments/rxp-android/releases
 
-- Add module 'hppmanager' into your project to use the HPP SDK.
-- If you want to use the card data validation library, add the module 'realexremote' into your project.
-
+- Add module 'rxp-hpp-android' into your project to use the HPP SDK.
+- If you want to use the card data validation library, add the module 'rxp-remote-android' into your project.
 
 ## Using the HPP SDK
 
@@ -130,6 +147,24 @@ Realex Payments maintain separate endpoints for live and test transactions. Youâ
 ```
 hppManager.setHppURL("https://hpp.test.realexpayments.com/pay";
 ```		
+
+## Remote API Validation Library Installation
+
+### Gradle users
+Add this dependency to your project's build file:
+```
+compile "com.realexpayments.remote.sdk:rxp-remote-android:1.0"
+```
+
+### Maven users
+Add this dependency to your project's POM:
+```xml
+<dependency>
+  <groupId>com.realexpayments.remote.sdk</groupId>
+  <artifactId>rxp-remote-android</artifactId>
+  <version>1.0</version>
+</dependency>
+```
 
 ## License
 
