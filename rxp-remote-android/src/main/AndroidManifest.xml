@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.realex.realexremote">
+          package="com.realexpayments.remote">
 
     <application android:allowBackup="true">
 
