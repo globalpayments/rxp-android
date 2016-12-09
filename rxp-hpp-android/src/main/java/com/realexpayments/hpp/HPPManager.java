@@ -15,11 +15,11 @@ import java.util.HashMap;
 
  You set these three URLs as follows;
 
- hppManager.setHppRequestProducerURL("http://myserver.com/HPP_Request_Producer.php");
+ hppManager.setHppRequestProducerURL("https://myserver.com/HPP_Request_Producer.php");
 
- hppManager.setHppResponseConsumerURL("http://myserver.com/HPP_Response_Consumer.php"");
+ hppManager.setHppResponseConsumerURL("https://myserver.com/HPP_Response_Consumer.php"");
  
- hppManager.setHppURL("https://hpp.test.realexpayments.com/pay";
+ hppManager.setHppURL("https://pay.sandbox.realexpayments.com/pay";
 
  Set HPP Properties
 
@@ -45,7 +45,7 @@ public class HPPManager extends HPPResponse {
 
     private String hppRequestProducerURL = "";
     private String hppResponseConsumerURL = "";
-    private String hppURL = "https://hpp.realexpayments.com/pay";
+    private String hppURL = "https://pay.realexpayments.com/pay";
 
     //Supplementary data to be sent to Realex Payments. This will be returned in the HPP response.
     private HashMap<String, String> supplementaryData = new HashMap<String, String>();
@@ -113,9 +113,9 @@ public class HPPManager extends HPPResponse {
      *
          Bundle args = new Bundle();
 
-         args.putString(HPPManager.HPPREQUEST_PRODUCER_URL, "http://myserver.com/HPP_Request_Producer.php");
-         args.putString(HPPManager.HPPRESPONSE_CONSUMER_URL, "http://myserver.com/HPP_Response_Consumer.php");
-         args.putString(HPPManager.HPPURL, "https://hpp.test.realexpayments.com/pay");
+         args.putString(HPPManager.HPPREQUEST_PRODUCER_URL, "https://myserver.com/HPP_Request_Producer.php");
+         args.putString(HPPManager.HPPRESPONSE_CONSUMER_URL, "https://myserver.com/HPP_Response_Consumer.php");
+         args.putString(HPPManager.HPPURL, "https://pay.sandbox.realexpayments.com/pay");
          args.putString(HPPManager.MERCHANT_ID, "realexsandbox");
          args.putString(HPPManager.AMOUNT, "100");
          args.putString(HPPManager.CURRENCY, "EUR");
