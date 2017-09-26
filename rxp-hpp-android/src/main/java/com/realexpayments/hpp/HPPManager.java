@@ -55,7 +55,7 @@ public class HPPManager extends HPPResponse {
         return lightBox;
     }
 
-    private static boolean lightBox = true;
+    private static boolean lightBox = false;
 
     /**
      *
