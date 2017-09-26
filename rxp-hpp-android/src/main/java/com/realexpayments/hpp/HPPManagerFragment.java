@@ -67,8 +67,18 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            Fragment hppManagerFragment = hppManager.newInstance();
+                     getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.hpp_web_view,hppManagerFragment)
+                    .commit();
             hppManager = HPPManager.createFromBundle(getArguments());
         }
+        Fragment hppManagerFragment = hppManager.newInstance();
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.hpp_web_view,hppManagerFragment)
+                .commit();
     }
 
     @Override
@@ -269,6 +279,11 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
             params.put(HPPManager.HPP_TEMPLATE_TYPE, "LIGHTBOX");
             Uri uri = Uri.parse(hppManager.getHppRequestProducerURL());
             params.put(HPPManager.HPP_ORIGIN, uri.getScheme() + "://" + uri.getHost());
+        }
+        else {
+            params.put(HPPManager.HPP_VERSION, "2");
+            Uri uri = Uri.parse(hppManager.getHppRequestProducerURL());
+            params.put(HPPManager.HPP_POST_RESPONSE, uri.getScheme() + "://" + uri.getHost());
         }
 
         for (String key : params.keySet()) {

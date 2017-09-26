@@ -39,6 +39,8 @@ public class HPPResponse {
     public static final String HPP_TEMPLATE_TYPE = "HPP_TEMPLATE_TYPE";
     public static final String HPP_ORIGIN = "HPP_ORIGIN";
     public static final String SUPPLEMENTARYDATA = "SUPPLEMENTARYDATA";
+    public static final String HPP_VERSION = "HPP_VERSION";
+    public static final String HPP_POST_RESPONSE = "HPP_POST_RESPONSE";
 
     /**
      * Getter for merchant ID.
