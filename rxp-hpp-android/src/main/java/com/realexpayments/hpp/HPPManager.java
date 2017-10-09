@@ -42,22 +42,23 @@ public class HPPManager extends HPPResponse {
     public static final String HPPREQUEST_PRODUCER_URL = "HPPREQUEST_PRODUCER_URL";
     public static final String HPPRESPONSE_CONSUMER_URL = "HPPRESPONSE_CONSUMER_URL";
     public static final String HPPURL = "HPPURL";
-    public static final String hppPOST = "https://www.mydomain.com";
 
     private String hppRequestProducerURL = "";
     private String hppResponseConsumerURL = "";
     private String hppURL = "https://pay.realexpayments.com/pay";
 
-
     //Supplementary data to be sent to Realex Payments. This will be returned in the HPP response.
     private HashMap<String, String> supplementaryData = new HashMap<String, String>();
 
+    private static boolean isEncoded = false;
 
-    public static boolean isLightBox() {
-        return lightBox;
+    public static boolean isEncoded() {
+        return isEncoded;
     }
 
-    private static boolean lightBox = true;
+    public static void setIsEncoded(boolean isEncoded) {
+        HPPManager.isEncoded = isEncoded;
+    }
 
     /**
      *
@@ -81,6 +82,7 @@ public class HPPManager extends HPPResponse {
      * @return hpp response consumer url
      */
     public String getHppResponseConsumerURL() {
+
         return hppResponseConsumerURL;
     }
 
