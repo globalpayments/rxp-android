@@ -271,23 +271,18 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
         params.put(HPPManager.HPP_POST_RESPONSE, uri.getScheme() + "://" + uri.getHost());
 
         for (String key : params.keySet()) {
-            if (params.get(key) != null && params.get(key).length() > 0)
-
+           if (params.get(key) != null && params.get(key).length() > 0) {
                 if (hppManager.isEncoded()) {
-                    if (key.equals("SHA1HASH") || key.equals("TIMESTAMP") || key.equals("ACCOUNT") || key.equals("AMOUNT")
-                            || key.equals("ORDER_ID") || key.equals("MERCHANT_ID") || key.equals("CURRENCY") || key.equals("AUTO_SETTLE_FLAG")
-                            ) {
-                        String encodeValue = params.get(key);
+                    if (!key.equals("HPP_POST_RESPONSE") && !key.equals("HPP_VERSION")) {
+                        String encodeValue = new String(params.get(key));
                         byte[] decodeValue = Base64.decode(encodeValue.toString(), Base64.DEFAULT);
                         String decodeValues = new String(decodeValue);
-                        nvps.add(new BasicNameValuePair(key, decodeValues));
-                    } else {
-                        nvps.add(new BasicNameValuePair(key, params.get(key)));
+                        nvps.add(new BasicNameValuePair(key, decodeValues.toString()));
                     }
-                }
-                else{
+                } else {
                     nvps.add(new BasicNameValuePair(key, params.get(key)));
                 }
+            }
         }
 
         try {
