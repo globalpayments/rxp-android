@@ -266,20 +266,23 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
             params.put(key, consumer_response_params.get(key));
         }
 
-        params.put(HPPManager.HPP_VERSION, "2");
+        // default to HPP Version 2
+        nvps.add(new BasicNameValuePair("HPP_VERSION", "2"));
+
+        // determine the target origin to receive the response
         Uri uri = Uri.parse(hppManager.getHppRequestProducerURL());
-        params.put(HPPManager.HPP_POST_RESPONSE, uri.getScheme() + "://" + uri.getHost());
+        nvps.add(new BasicNameValuePair("HPP_POST_RESPONSE", uri.getScheme() + "://" + uri.getHost()));
 
         for (String key : params.keySet()) {
            if (params.get(key) != null && params.get(key).length() > 0) {
                 if (hppManager.isEncoded()) {
-                    if (!key.equals("HPP_POST_RESPONSE") && !key.equals("HPP_VERSION")) {
                         String encodeValue = new String(params.get(key));
                         byte[] decodeValue = Base64.decode(encodeValue.toString(), Base64.DEFAULT);
                         String decodeValues = new String(decodeValue);
                         nvps.add(new BasicNameValuePair(key, decodeValues.toString()));
-                    }
-                } else {
+                }
+
+                else {
                     nvps.add(new BasicNameValuePair(key, params.get(key)));
                 }
             }
