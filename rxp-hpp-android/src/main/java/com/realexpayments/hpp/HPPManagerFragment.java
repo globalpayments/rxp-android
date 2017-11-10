@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.util.Base64;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -47,9 +48,9 @@ import retrofit.mime.TypedByteArray;
 /**
  * Payment form fragment.
  *
-    Insert the HppManager fragment into your activity as follows;
-    Fragment hppManagerFragment = hppManager.newInstance();  
-    getFragmentManager() .beginTransaction().add(R.id.container,hppManagerFrament) .commit();
+ Insert the HppManager fragment into your activity as follows;
+ Fragment hppManagerFragment = hppManager.newInstance();  
+ getFragmentManager() .beginTransaction().add(R.id.container,hppManagerFrament) .commit();
 
  **/
 
@@ -215,7 +216,7 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
 
                                      @SuppressLint("NewApi")
                                      @Override
-                                         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                                     public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                                          super.onReceivedHttpError(view, request, errorResponse);
 
                                          if (this.url.equals(hppManager.getHppURL())) {
@@ -265,15 +266,26 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
             params.put(key, consumer_response_params.get(key));
         }
 
-        if (hppManager.isLightBox()) {
-            params.put(HPPManager.HPP_TEMPLATE_TYPE, "LIGHTBOX");
-            Uri uri = Uri.parse(hppManager.getHppRequestProducerURL());
-            params.put(HPPManager.HPP_ORIGIN, uri.getScheme() + "://" + uri.getHost());
-        }
+        // default to HPP Version 2
+        nvps.add(new BasicNameValuePair("HPP_VERSION", "2"));
+
+        // determine the target origin to receive the response
+        Uri uri = Uri.parse(hppManager.getHppRequestProducerURL());
+        nvps.add(new BasicNameValuePair("HPP_POST_RESPONSE", uri.getScheme() + "://" + uri.getHost()));
 
         for (String key : params.keySet()) {
-            if (params.get(key) != null && params.get(key).length() > 0)
-                nvps.add(new BasicNameValuePair(key, params.get(key)));
+           if (params.get(key) != null && params.get(key).length() > 0) {
+                if (hppManager.isEncoded()) {
+                        String encodeValue = new String(params.get(key));
+                        byte[] decodeValue = Base64.decode(encodeValue.toString(), Base64.DEFAULT);
+                        String decodeValues = new String(decodeValue);
+                        nvps.add(new BasicNameValuePair(key, decodeValues.toString()));
+                }
+
+                else {
+                    nvps.add(new BasicNameValuePair(key, params.get(key)));
+                }
+            }
         }
 
         try {
