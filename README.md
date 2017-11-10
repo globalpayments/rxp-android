@@ -162,7 +162,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.realexpayments.remote.sdk</groupId>
   <artifactId>rxp-remote-android</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 ```
 
