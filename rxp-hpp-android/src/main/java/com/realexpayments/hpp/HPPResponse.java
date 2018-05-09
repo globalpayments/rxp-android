@@ -39,6 +39,8 @@ public class HPPResponse {
     public static final String HPP_TEMPLATE_TYPE = "HPP_TEMPLATE_TYPE";
     public static final String HPP_ORIGIN = "HPP_ORIGIN";
     public static final String SUPPLEMENTARYDATA = "SUPPLEMENTARYDATA";
+    public static final String HPP_VERSION = "HPP_VERSION";
+    public static final String HPP_POST_RESPONSE = "HPP_POST_RESPONSE";
 
     /**
      * Getter for merchant ID.
@@ -724,6 +726,12 @@ public class HPPResponse {
     @SerializedName(HPP_ORIGIN)
     protected String origin;
 
+    @SerializedName(HPP_VERSION)
+    protected String hppVersion;
+
+    @SerializedName(HPP_POST_RESPONSE)
+    protected String hppPostResponse;
+
     public HashMap<String, String> getMap() {
         HashMap<String, String> parameters = new HashMap<>();
 
@@ -756,6 +764,8 @@ public class HPPResponse {
         parameters.put(SHA1_HASH, sha1Hash);
         parameters.put(HPP_TEMPLATE_TYPE, templateType);
         parameters.put(HPP_ORIGIN, origin);
+        parameters.put(HPP_VERSION, hppVersion);
+        parameters.put(HPP_POST_RESPONSE, hppPostResponse);
 
         return parameters;
     }
