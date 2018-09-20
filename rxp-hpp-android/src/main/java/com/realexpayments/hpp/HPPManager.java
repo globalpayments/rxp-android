@@ -3,7 +3,12 @@ package com.realexpayments.hpp;
 import android.app.Fragment;
 import android.os.Bundle;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The main object the host app creates.
@@ -38,12 +43,19 @@ public class HPPManager extends HPPResponse {
     public static final String HPPRESPONSE_CONSUMER_URL = "HPPRESPONSE_CONSUMER_URL";
     public static final String HPPURL = "HPPURL";
 
+    public static final String HPPREQUEST_PRODUCER_HEADERS ="HPPREQUEST_PRODUCER_HEADERS";
+    public static final String HPPRESPONSE_CONSUMER_HEADERS = "HPPRESPONSE_CONSUMER_HEADERS";
+
     private String hppRequestProducerURL = "";
     private String hppResponseConsumerURL = "";
     private String hppURL = "https://pay.realexpayments.com/pay";
 
     //Supplementary data to be sent to Realex Payments. This will be returned in the HPP response.
     private HashMap<String, String> supplementaryData = new HashMap<String, String>();
+
+    //Headers
+    private HashMap<String, String> callbackHeaders = new HashMap<String, String>();
+    private HashMap<String, String> producerHeaders = new HashMap<String, String>();
 
     private static boolean isEncoded = false;
 
@@ -135,6 +147,16 @@ public class HPPManager extends HPPResponse {
         hppManager.hppResponseConsumerURL = arg.getString(HPPRESPONSE_CONSUMER_URL);
         hppManager.hppURL = arg.getString(HPPURL);
 
+        //reinflate headers from JSON
+        Type type = new TypeToken<HashMap<String, String>>(){}.getType();
+        String headersJSON = arg.getString(HPPRESPONSE_CONSUMER_HEADERS);
+        if (headersJSON != null)
+            hppManager.setCallbackHeaders((HashMap<String, String>) new Gson().fromJson(headersJSON, type));
+        headersJSON = arg.getString(HPPREQUEST_PRODUCER_HEADERS);
+        if (headersJSON != null)
+            hppManager.setProducerHeaders((HashMap<String, String>) new Gson().fromJson(headersJSON, type));
+
+
         hppManager.merchantId = arg.getString(MERCHANT_ID);
         hppManager.account = arg.getString(ACCOUNT);
         hppManager.orderId = arg.getString(ORDER_ID);
@@ -179,6 +201,10 @@ public class HPPManager extends HPPResponse {
         args.putString(HPPREQUEST_PRODUCER_URL, hppRequestProducerURL);
         args.putString(HPPRESPONSE_CONSUMER_URL, hppResponseConsumerURL);
         args.putString(HPPURL, hppURL);
+
+        //save headers as JSON
+        args.putString(HPPREQUEST_PRODUCER_HEADERS,new Gson().toJson(getProducerHeaders()));
+        args.putString(HPPRESPONSE_CONSUMER_HEADERS,new Gson().toJson(getCallbackHeaders()));
 
         args.putString(MERCHANT_ID, merchantId);
         args.putString(ORDER_ID, orderId);
@@ -242,5 +268,35 @@ public class HPPManager extends HPPResponse {
      */
     public void setSupplementaryData(String key, String value) {
         supplementaryData.put(key,value);
+    }
+
+    /**
+     * adds a header to be used in the Request to the producer
+     * @param key
+     * @param value
+     */
+    public void addHppRequestProducerHeader(String key, String value) {producerHeaders.put(key,value); }
+
+    public HashMap<String, String> getProducerHeaders() {
+        return producerHeaders;
+    }
+
+    public void setProducerHeaders(HashMap<String, String> headers) {
+        this.producerHeaders = headers;
+    }
+
+    /**
+     * adds a header to be used in the Callback request
+     * @param key
+     * @param value
+     */
+    public void addHppRequestCallbackHeader(String key, String value) {callbackHeaders.put(key,value); }
+
+    public HashMap<String, String> getCallbackHeaders() {
+        return callbackHeaders;
+    }
+
+    public void setCallbackHeaders(HashMap<String, String> headers) {
+        this.callbackHeaders = headers;
     }
 }

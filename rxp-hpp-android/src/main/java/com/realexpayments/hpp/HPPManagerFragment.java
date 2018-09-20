@@ -90,7 +90,8 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
 
                 HashMap<String, String> parameters = hppManager.getMap();
 
-                ApiAdapter.getAdapter(getHostPath(hppManager.getHppRequestProducerURL())).getHPPRequest(getRelativePathEncoded(hppManager.getHppRequestProducerURL()), parameters, this);
+                ApiAdapter.getAdapter(getHostPath(hppManager.getHppRequestProducerURL()),hppManager.getProducerHeaders())
+                        .getHPPRequest(getRelativePathEncoded(hppManager.getHppRequestProducerURL()), parameters, this);
 
             } else {
 
@@ -305,7 +306,8 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
         if (!isResultReceived && data.length() > 0) {
             isResultReceived = true;
 
-            ApiAdapter.getAdapter(getHostPath(hppManager.getHppResponseConsumerURL())).getConsumerRequest(getRelativePathEncoded(hppManager.getHppResponseConsumerURL()),
+            ApiAdapter.getAdapter(getHostPath(hppManager.getHppResponseConsumerURL()),hppManager.getCallbackHeaders())
+                    .getConsumerRequest(getRelativePathEncoded(hppManager.getHppResponseConsumerURL()),
                     data, new Callback<Response>() {
                         @Override
                         public void success(Response s, Response response) {
