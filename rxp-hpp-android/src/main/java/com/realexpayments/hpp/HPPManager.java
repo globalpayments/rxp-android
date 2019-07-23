@@ -1,7 +1,9 @@
 package com.realexpayments.hpp;
 
-import android.app.Fragment;
+
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
 
@@ -16,14 +18,19 @@ import java.util.HashMap;
  You set these three URLs as follows;
 
  hppManager.setHppRequestProducerURL("https://myserver.com/HPP_Request_Producer.php");
+
  hppManager.setHppResponseConsumerURL("https://myserver.com/HPP_Response_Consumer.php"");
+ 
  hppManager.setHppURL("https://pay.sandbox.realexpayments.com/pay";
 
  Set HPP Properties
 
  hppManager.setMerchantId("realexsandbox");
+ 
  hppManager.setAccount("internet");
+ 
  hppManager.setAmount("100");
+ 
  hppManager.setCurrency("EUR");
 
  it is also possible to set options by createFromBundle function
@@ -45,15 +52,12 @@ public class HPPManager extends HPPResponse {
     //Supplementary data to be sent to Realex Payments. This will be returned in the HPP response.
     private HashMap<String, String> supplementaryData = new HashMap<String, String>();
 
-    private static boolean isEncoded = false;
 
-    public static boolean isEncoded() {
-        return isEncoded;
+    public static boolean isLightBox() {
+        return lightBox;
     }
 
-    public static void setIsEncoded(boolean isEncoded) {
-        HPPManager.isEncoded = isEncoded;
-    }
+    private static boolean lightBox = true;
 
     /**
      *
@@ -77,7 +81,6 @@ public class HPPManager extends HPPResponse {
      * @return hpp response consumer url
      */
     public String getHppResponseConsumerURL() {
-
         return hppResponseConsumerURL;
     }
 
@@ -153,8 +156,6 @@ public class HPPManager extends HPPResponse {
         hppManager.variableReference = arg.getString(VAR_REF);
         hppManager.productId = arg.getString(PROD_ID);
         hppManager.language = arg.getString(HPP_LANG);
-        hppManager.hppVersion = arg.getString(HPP_VERSION);
-        hppManager.hppPostResponse = arg.getString(HPP_POST_RESPONSE);
         hppManager.cardPaymentButtonText = arg.getString(CARD_PAYMENT_BUTTON);
         hppManager.cardStorageEnable = arg.getString(CARD_STORAGE_ENABLE);
         hppManager.offerSaveCard = arg.getString(OFFER_SAVE_CARD);
@@ -204,8 +205,6 @@ public class HPPManager extends HPPResponse {
         args.putString(VAR_REF, variableReference);
         args.putString(PROD_ID, productId);
         args.putString(HPP_LANG, language);
-        args.putString(HPP_VERSION, hppVersion);
-        args.putString(HPP_POST_RESPONSE, hppPostResponse);
         args.putString(CARD_PAYMENT_BUTTON, cardPaymentButtonText);
         args.putString(CARD_STORAGE_ENABLE, cardStorageEnable);
         args.putString(OFFER_SAVE_CARD, offerSaveCard);
