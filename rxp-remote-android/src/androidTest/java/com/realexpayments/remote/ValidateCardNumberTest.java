@@ -1,15 +1,16 @@
 package com.realexpayments.remote;
 
 import androidx.test.filters.SmallTest;
-import static junit.framework.TestCase.assertTrue;
+
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 /*
  * Unit tests for validateCardNumber
  */
 
-public class ValidateCardNumberTest {
+public class ValidateCardNumberTest  {
 
     @SmallTest
     public void testValidCard() {

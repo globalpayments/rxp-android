@@ -2,9 +2,8 @@ package com.realexpayments.remote;
 
 import androidx.test.filters.SmallTest;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
-
+import static org.junit.Assert.assertTrue;
 /*
  * Expiry date format validation (validateExpiryDateFormat)
  */

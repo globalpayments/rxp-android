@@ -1,13 +1,13 @@
 package com.realexpayments.remote;
 
 import androidx.test.filters.SmallTest;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
-
-public class ValidateExpiryDateNotInPastTest{
+public class ValidateExpiryDateNotInPastTest  {
 
     @SmallTest
     public void testDateInPast() {
