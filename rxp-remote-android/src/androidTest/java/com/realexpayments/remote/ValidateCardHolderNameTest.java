@@ -1,19 +1,19 @@
 package com.realexpayments.remote;
 
 import android.app.Application;
-import android.test.ApplicationTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
+import androidx.test.InstrumentationRegistry;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /*
 * Unit tests for validateCardHolderName
 * card holder name validation (validateCardHolderName)
 */
 
-public class ValidateCardHolderNameTest extends ApplicationTestCase<Application> {
-
-    public ValidateCardHolderNameTest() {
-        super(Application.class);
-    }
+public class ValidateCardHolderNameTest {
 
     @SmallTest
     public void testValidName() {

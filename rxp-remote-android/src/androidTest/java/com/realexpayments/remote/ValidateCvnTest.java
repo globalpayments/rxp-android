@@ -1,19 +1,15 @@
 package com.realexpayments.remote;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import androidx.test.filters.SmallTest;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 /*
  * Unit tests for validateCvn
  * CVN non-Amex validation (validateCvn)
  */
 
-public class ValidateCvnTest extends ApplicationTestCase<Application> {
-
-    public ValidateCvnTest() {
-        super(Application.class);
-    }
+public class ValidateCvnTest {
 
     @SmallTest
     public void testValidNonAmexCVN() {

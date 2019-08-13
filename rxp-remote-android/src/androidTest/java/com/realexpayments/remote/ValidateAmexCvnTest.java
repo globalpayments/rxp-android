@@ -1,14 +1,12 @@
 package com.realexpayments.remote;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
 
-public class ValidateAmexCvnTest extends ApplicationTestCase<Application> {
+import androidx.test.filters.SmallTest;
 
-    public ValidateAmexCvnTest() {
-        super(Application.class);
-    }
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class ValidateAmexCvnTest {
 
     @SmallTest
     public void testValidAmexCVN() {

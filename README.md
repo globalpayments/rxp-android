@@ -11,7 +11,7 @@ You can find more information on how to use this SDK and sign up for a free Real
 ### Gradle users
 Add this dependency to your project's build file:
 ```
-compile "com.realexpayments.hpp.sdk:rxp-hpp-android:1.2"
+compile "com.realexpayments.hpp.sdk:rxp-hpp-android:2.0"
 ```
 
 ### Maven users
@@ -20,7 +20,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.realexpayments.hpp.sdk</groupId>
   <artifactId>rxp-hpp-android</artifactId>
-  <version>1.2</version>
+  <version>2.0</version>
 </dependency>
 ```
 
@@ -85,7 +85,7 @@ Insert the HppManager fragment into your activity as follows:
 
 ```
 Fragment hppManagerFragment = hppManager.newInstance();
-	getFragmentManager()    
+	getSupportFragmentManager()    
         .beginTransaction()      
         .add(R.id.container,hppManagerFragment)      
         .commit()
@@ -153,7 +153,7 @@ hppManager.setHppURL("https://pay.sandbox.realexpayments.com/pay";
 ### Gradle users
 Add this dependency to your project's build file:
 ```
-compile "com.realexpayments.remote.sdk:rxp-remote-android:1.1"
+compile "com.realexpayments.remote.sdk:rxp-remote-android:2.0"
 ```
 
 ### Maven users
@@ -162,7 +162,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.realexpayments.remote.sdk</groupId>
   <artifactId>rxp-remote-android</artifactId>
-  <version>1.1</version>
+  <version>2.0</version>
 </dependency>
 ```
 
