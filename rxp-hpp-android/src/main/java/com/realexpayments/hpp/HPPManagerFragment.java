@@ -8,6 +8,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.fragment.app.Fragment;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,9 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import android.util.Base64;
-
-import androidx.fragment.app.Fragment;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -48,11 +48,10 @@ import retrofit.mime.TypedByteArray;
 
 /**
  * Payment form fragment.
- *
- Insert the HppManager fragment into your activity as follows;
- Fragment hppManagerFragment = hppManager.newInstance();  
- getFragmentManager() .beginTransaction().add(R.id.container,hppManagerFrament) .commit();
-
+ * <p>
+ * Insert the HppManager fragment into your activity as follows;
+ * Fragment hppManagerFragment = hppManager.newInstance();
+ * getFragmentManager() .beginTransaction().add(R.id.container,hppManagerFrament) .commit();
  **/
 
 public class HPPManagerFragment extends Fragment implements Callback<Response> {
@@ -133,7 +132,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
 
         super.onDestroy();
     }
-
 
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -259,7 +257,8 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
 
         HashMap<String, String> params = new HashMap<>();//hppManager.getMap();
 
-        Type mapType = new TypeToken<Map<String, String>>(){}.getType();
+        Type mapType = new TypeToken<Map<String, String>>() {
+        }.getType();
         Map<String, String> consumer_response_params = new Gson().fromJson(resp, mapType);
 
         //merge params
@@ -275,15 +274,13 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
         nvps.add(new BasicNameValuePair("HPP_POST_RESPONSE", uri.getScheme() + "://" + uri.getHost()));
 
         for (String key : params.keySet()) {
-           if (params.get(key) != null && params.get(key).length() > 0) {
+            if (params.get(key) != null && params.get(key).length() > 0) {
                 if (hppManager.isEncoded()) {
-                        String encodeValue = new String(params.get(key));
-                        byte[] decodeValue = Base64.decode(encodeValue.toString(), Base64.DEFAULT);
-                        String decodeValues = new String(decodeValue);
-                        nvps.add(new BasicNameValuePair(key, decodeValues.toString()));
-                }
-
-                else {
+                    String encodeValue = new String(params.get(key));
+                    byte[] decodeValue = Base64.decode(encodeValue.toString(), Base64.DEFAULT);
+                    String decodeValues = new String(decodeValue);
+                    nvps.add(new BasicNameValuePair(key, decodeValues.toString()));
+                } else {
                     nvps.add(new BasicNameValuePair(key, params.get(key)));
                 }
             }
