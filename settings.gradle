@@ -1,1 +1,1 @@
-include ':rxp-hpp-android', ':rxp-remote-android'
+include ':rxp-hpp-android', ':rxp-remote-android', ':sample-app'
