@@ -61,6 +61,16 @@ hppManager.setHppURL("https://pay.realexpayments.com/pay";
 hppManager.setHppResponseConsumerURL("https://myserver.com/hppResponseConsumer");
 ```
 
+### Add additional headers to requests
+
+```
+HashMap<String, String> additionalHeaders = new HashMap<>();
+additionalHeaders.put("headerName1", "headerValue1");
+additionalHeaders.put("headerName2", "headerValue2");
+additionalHeaders.put("headerName3", "headerValue3");
+hppManager.setAdditionalHeaders(additionalHeaders);
+```
+
 ### Implement HPPManagerListener In Your Activity
 
 There are three possible outcomes from the HPP interaction
