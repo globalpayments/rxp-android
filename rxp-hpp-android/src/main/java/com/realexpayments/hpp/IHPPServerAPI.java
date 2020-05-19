@@ -16,13 +16,30 @@ import retrofit.http.Path;
 
 interface IHPPServerAPI {
 
+    String PATH_ARG = "path";
+    String PATH = "/{" + PATH_ARG + "}";
+
     @FormUrlEncoded
-        @POST("/{path}")
-        public void getHPPRequest(@Path(value = "path", encode = false) String path, @FieldMap HashMap<String, String> args,
-                                  Callback<Response> callback);
+    @POST(PATH)
+    void getHPPRequest(
+            @Path(value = PATH_ARG, encode = false) String path,
+            @FieldMap HashMap<String, String> args,
+            Callback<Response> callback
+    );
 
-        @FormUrlEncoded
-        @POST("/{path}")
-        public void getConsumerRequest(@Path(value = "path", encode = false) String path, @Field("hppResponse") String hppResponse,Callback<Response> callback);
+    @FormUrlEncoded
+    @POST(PATH)
+    void getConsumerRequest(
+            @Path(value = PATH_ARG, encode = false) String path,
+            @Field("hppResponse") String hppResponse,
+            Callback<Response> callback
+    );
 
+    @FormUrlEncoded
+    @POST(PATH)
+    void getHPP(
+            @Path(value = PATH_ARG, encode = false) String path,
+            @FieldMap HashMap<String, String> args,
+            Callback<Response> callback
+    );
 }

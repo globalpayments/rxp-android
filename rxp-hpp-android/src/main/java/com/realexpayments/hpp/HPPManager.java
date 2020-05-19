@@ -5,7 +5,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The main object the host app creates.
@@ -39,13 +41,17 @@ public class HPPManager extends HPPResponse {
     public static final String HPPREQUEST_PRODUCER_URL = "HPPREQUEST_PRODUCER_URL";
     public static final String HPPRESPONSE_CONSUMER_URL = "HPPRESPONSE_CONSUMER_URL";
     public static final String HPPURL = "HPPURL";
+    public static final String ADDITIONAL_HEADERS = "ADDITIONAL_HEADERS";
 
     private String hppRequestProducerURL = "";
     private String hppResponseConsumerURL = "";
     private String hppURL = "https://pay.realexpayments.com/pay";
 
+    //Used to add additional headers to requests
+    private HashMap<String, String> additionalHeaders = new HashMap<>();
+
     //Supplementary data to be sent to Realex Payments. This will be returned in the HPP response.
-    private HashMap<String, String> supplementaryData = new HashMap<String, String>();
+    private HashMap<String, String> supplementaryData = new HashMap<>();
 
     private static boolean isEncoded = false;
 
@@ -109,6 +115,14 @@ public class HPPManager extends HPPResponse {
         this.hppURL = hppURL;
     }
 
+    public HashMap<String, String> getAdditionalHeaders() {
+        return additionalHeaders;
+    }
+
+    public void setAdditionalHeaders(HashMap<String, String> additionalHeaders) {
+        this.additionalHeaders = additionalHeaders;
+    }
+
     /**
      * initialize HPPManager from argument
      *
@@ -136,6 +150,12 @@ public class HPPManager extends HPPResponse {
         hppManager.hppRequestProducerURL = arg.getString(HPPREQUEST_PRODUCER_URL);
         hppManager.hppResponseConsumerURL = arg.getString(HPPRESPONSE_CONSUMER_URL);
         hppManager.hppURL = arg.getString(HPPURL);
+
+        Object additionalHeadersArg = arg.getSerializable(ADDITIONAL_HEADERS);
+
+        if (additionalHeadersArg != null) {
+            hppManager.additionalHeaders = (HashMap<String, String>) additionalHeadersArg;
+        }
 
         hppManager.merchantId = arg.getString(MERCHANT_ID);
         hppManager.account = arg.getString(ACCOUNT);
@@ -181,6 +201,7 @@ public class HPPManager extends HPPResponse {
         args.putString(HPPREQUEST_PRODUCER_URL, hppRequestProducerURL);
         args.putString(HPPRESPONSE_CONSUMER_URL, hppResponseConsumerURL);
         args.putString(HPPURL, hppURL);
+        args.putSerializable(ADDITIONAL_HEADERS, additionalHeaders);
 
         args.putString(MERCHANT_ID, merchantId);
         args.putString(ORDER_ID, orderId);

@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements HPPManagerListene
         additionalHeaders.put("headerName1", "headerValue1");
         additionalHeaders.put("headerName2", "headerValue2");
         additionalHeaders.put("headerName3", "headerValue3");
-//        hppManager.setAdditionalHeaders(additionalHeaders);
+        hppManager.setAdditionalHeaders(additionalHeaders);
 
         Fragment hppManagerFragment = hppManager.newInstance();
         getSupportFragmentManager()
