@@ -1,4 +1,37 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'rxp-hpp-android'
+    bintrayUser = System.getenv('BINTRAY_USER')
+    bintrayKey = System.getenv('BINTRAY_KEY')
+    bintrayGPGPassphrase = System.getenv('BINTRAY_GPG_PASSPHRASE')
+
+    publishedGroupId = 'com.realexpayments.hpp.sdk'
+    libraryName = 'rxp-hpp-android'
+    artifact = 'rxp-hpp-android'
+
+    libraryDescription = 'The official Realex Payments Android SDK for HPP and Remote API.'
+
+    siteUrl = 'https://developer.realexpayments.com'
+    gitUrl = 'https://github.com/realexpayments/rxp-android.git'
+
+    libraryVersion = '1.3'
+
+    developerId = 'realexpayments'
+    developerName = 'Realex Payments'
+    developerEmail = 'developers@realexpayments.com'
+
+    licenseName = 'The MIT License (MIT)'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
+// Maven Group ID for the artifact
+group = publishedGroupId
+version = libraryVersion
 
 android {
     compileSdkVersion 29
@@ -8,7 +41,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 3
-        versionName "2.0"
+        versionName libraryVersion
     }
     buildTypes {
         release {
@@ -24,4 +57,106 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.squareup.retrofit:retrofit:1.7.1'
     implementation 'org.apache.httpcomponents:httpcore:4.4.10'
+}
+
+task printBintrayEnv() {
+    println "bintrayUser: " + bintrayUser
+    println "bintrayKey: " + bintrayKey
+    println "bintrayGPGPassphrase: " + bintrayGPGPassphrase
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.convention('sources')
+    archiveClassifier.set('sources')
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    options.encoding = 'UTF-8'
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.convention('javadoc')
+    archiveClassifier.set('javadoc')
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishedGroupId
+                artifactId artifact
+
+                // description
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+// Bintray
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        publish = true
+        publicDownloadNumbers = true
+
+        licenses = allLicenses
+        vcsUrl = gitUrl
+        websiteUrl = siteUrl
+
+        version {
+            name = libraryVersion
+            desc = libraryDescription
+            released  = new Date()
+            vcsTag = libraryVersion
+            desc = libraryDescription
+            // Optional. The passphrase for GPG signing'
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = bintrayGPGPassphrase
+            }
+        }
+    }
 }
