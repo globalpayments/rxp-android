@@ -57,6 +57,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.squareup.retrofit:retrofit:1.7.1'
     implementation 'org.apache.httpcomponents:httpcore:4.4.10'
+    testImplementation 'junit:junit:4.12'
 }
 
 task printBintrayEnv() {

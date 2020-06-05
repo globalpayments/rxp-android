@@ -7,7 +7,6 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,10 +41,13 @@ import retrofit.mime.TypedByteArray;
 import static com.realexpayments.hpp.Constants.HTML_MIME_TYPE;
 import static com.realexpayments.hpp.Constants.HTTP_SCHEME_ENDING;
 import static com.realexpayments.hpp.Constants.JS_WEBVIEW_OBJECT_NAME;
-import static com.realexpayments.hpp.Constants.SLASH;
 import static com.realexpayments.hpp.Constants.UTF_8;
 import static com.realexpayments.hpp.HPPResponse.HPP_POST_RESPONSE;
 import static com.realexpayments.hpp.HPPResponse.HPP_VERSION;
+import static com.realexpayments.hpp.Utils.collectValidMapValues;
+import static com.realexpayments.hpp.Utils.decode;
+import static com.realexpayments.hpp.Utils.getHostPath;
+import static com.realexpayments.hpp.Utils.getRelativePathEncoded;
 
 /**
  * Payment form fragment.
@@ -113,36 +115,7 @@ public class HPPManagerFragment extends Fragment {
     }
 
     private Map<String, String> getRequestHeaders() {
-        HashMap<String, String> headersMap = new HashMap<>();
-        HashMap<String, String> additionalHeaders = hppManager.getAdditionalHeaders();
-
-        if (additionalHeaders != null && !additionalHeaders.isEmpty()) {
-            for (String headerName : additionalHeaders.keySet()) {
-                String headerValue = additionalHeaders.get(headerName);
-
-                if (!TextUtils.isEmpty(headerName) && !TextUtils.isEmpty(headerValue)) {
-                    headersMap.put(headerName, headerValue);
-                }
-            }
-        }
-
-        return headersMap;
-    }
-
-    private String getHostPath(String urlString) {
-        return urlString.substring(0, urlString.lastIndexOf(getRelativePath(urlString)) - 1);
-    }
-
-    private String getRelativePath(String urlString) {
-        Uri uri = Uri.parse(urlString);
-        String path = uri.getPath();
-        return (path.startsWith(SLASH)) ? path.substring(1) : path;
-    }
-
-    private String getRelativePathEncoded(String urlString) {
-        Uri uri = Uri.parse(urlString);
-        String encodedPath = uri.getEncodedPath();
-        return (encodedPath.startsWith(SLASH)) ? encodedPath.substring(1) : encodedPath;
+        return collectValidMapValues(hppManager.getAdditionalHeaders());
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -153,7 +126,6 @@ public class HPPManagerFragment extends Fragment {
         WebView.setWebContentsDebuggingEnabled(true);
 
         webView.setOnKeyListener(new View.OnKeyListener() {
-
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -170,7 +142,6 @@ public class HPPManagerFragment extends Fragment {
         });
 
         webView.setWebChromeClient(new WebChromeClient() {
-
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
                 if (consoleMessage.message().startsWith(HPPManager.RESULT_MESSAGE)) {
@@ -180,7 +151,6 @@ public class HPPManagerFragment extends Fragment {
                 }
 
                 return super.onConsoleMessage(consoleMessage);
-
             }
         });
 
@@ -212,7 +182,6 @@ public class HPPManagerFragment extends Fragment {
                     HPPError hppError = new HPPError(errorResponse.getReasonPhrase(), hppManager.getHppURL());
                     mListener.hppManagerFailedWithError(hppError);
                 }
-
             }
 
             @SuppressLint("NewApi")
@@ -222,7 +191,6 @@ public class HPPManagerFragment extends Fragment {
                 isResultReceived = true;
                 HPPError hppError = new HPPError(error.getDescription().toString(), hppManager.getHppURL());
                 mListener.hppManagerFailedWithError(hppError);
-
             }
 
             @Override
@@ -231,7 +199,6 @@ public class HPPManagerFragment extends Fragment {
                 isResultReceived = true;
                 HPPError hppError = new HPPError(error.toString(), hppManager.getHppURL());
                 mListener.hppManagerFailedWithError(hppError);
-
             }
         };
     }
@@ -240,16 +207,17 @@ public class HPPManagerFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                view.evaluateJavascript("javascript:console.log('" + HPPManager.RESULT_MESSAGE
-                                + "'+document.getElementById('result-message').innerHTML);",
-                        new ValueCallback<String>() {
-                            @Override
-                            public void onReceiveValue(String value) {
-                                if (!isResultReceived) {
-                                    checkResult(view, handler);
-                                }
-                            }
-                        });
+                String script = "javascript:console.log('" + HPPManager.RESULT_MESSAGE
+                        + "'+document.getElementById('result-message').innerHTML);";
+
+                view.evaluateJavascript(script, new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        if (!isResultReceived) {
+                            checkResult(view, handler);
+                        }
+                    }
+                });
 
             }
         }, 100);
@@ -270,14 +238,8 @@ public class HPPManagerFragment extends Fragment {
             String paramValue = params.get(key);
 
             if (!TextUtils.isEmpty(paramValue)) {
-                if (HPPManager.isEncoded()) {
-                    byte[] decodedValue = Base64.decode(paramValue, Base64.DEFAULT);
-                    String decodedString = new String(decodedValue);
-                    map.put(key, decodedString);
-                } else {
-                    map.put(key, paramValue);
-                }
-
+                String finalParamValue = HPPManager.isEncoded() ? decode(paramValue) : paramValue;
+                map.put(key, finalParamValue);
             }
         }
 
@@ -364,8 +326,8 @@ public class HPPManagerFragment extends Fragment {
             mListener.hppManagerCancelled();
             isResultReceived = true;
         }
-        mListener = null;
 
+        mListener = null;
         super.onDestroy();
     }
 
