@@ -19,22 +19,18 @@ class ApiAdapter {
     public static final String RETROFIT_TAG = "HPPRetrofit";
 
     public static IHPPServerAPI getAdapter(String endpoint, Map<String, String> headers) {
-        RestAdapter restAdapter;
+        RestAdapter.Builder builderRestAdapter =
+                new RestAdapter
+                        .Builder()
+                        .setEndpoint(endpoint)
+                        .setConverter(new GsonConverter(getGson()))
+                        .setRequestInterceptor(getRequestInterceptor(headers));
         if (BuildConfig.DEBUG) {
-            restAdapter = new RestAdapter.Builder()
-                    .setEndpoint(endpoint)
+            builderRestAdapter
                     .setLogLevel(RestAdapter.LogLevel.FULL)
-                    .setLog(new AndroidLog(RETROFIT_TAG))
-                    .setConverter(new GsonConverter(getGson()))
-                    .setRequestInterceptor(getRequestInterceptor(headers))
-                    .build();
-        } else {
-            restAdapter = new RestAdapter.Builder()
-                    .setEndpoint(endpoint)
-                    .setConverter(new GsonConverter(getGson()))
-                    .setRequestInterceptor(getRequestInterceptor(headers))
-                    .build();
+                    .setLog(new AndroidLog(RETROFIT_TAG));
         }
+        RestAdapter restAdapter = builderRestAdapter.build();
         return restAdapter.create(IHPPServerAPI.class);
     }
 
