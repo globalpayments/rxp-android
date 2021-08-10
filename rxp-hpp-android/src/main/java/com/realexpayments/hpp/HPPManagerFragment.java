@@ -247,7 +247,7 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     }
 
     private HashMap<String, String> getHPPPostData(Map<String, String> params) {
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, String> map = hppManager.getMap();
 
         // default to HPP Version 2
         map.put(HPP_VERSION, "2");
