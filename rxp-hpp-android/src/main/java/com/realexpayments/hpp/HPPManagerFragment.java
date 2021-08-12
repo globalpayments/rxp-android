@@ -75,7 +75,8 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.hppmanager_fragment, container, false);
         return root;
@@ -86,24 +87,19 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
         super.onAttach(activity);
         try {
             mListener = (HPPManagerListener) activity;
-
             if (getArguments() != null) {
                 hppManager = HPPManager.createFromBundle(getArguments());
-
                 HashMap<String, String> parameters = hppManager.getMap();
-
-                ApiAdapter.getAdapter(getHostPath(hppManager.getHppRequestProducerURL()), getRequestHeaders())
+                ApiAdapter.getAdapter(
+                        getHostPath(hppManager.getHppRequestProducerURL()),
+                        getRequestHeaders())
                         .getHPPRequest(
                                 getRelativePathEncoded(hppManager.getHppRequestProducerURL()),
                                 parameters,
-                                this
-                        );
-
+                                this);
             } else {
-
-                mListener.hppManagerFailedWithError(new HPPError("Invalid arguments", null));
+                onError(new HPPError("Invalid arguments", null));
             }
-
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement HPPManagerListener");
@@ -113,7 +109,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     private Map<String, String> getRequestHeaders() {
         HashMap<String, String> headersMap = new HashMap<>();
         HashMap<String, String> additionalHeaders = hppManager.getAdditionalHeaders();
-
         if (additionalHeaders != null && !additionalHeaders.isEmpty()) {
             for (String headerName : additionalHeaders.keySet()) {
                 String headerValue = additionalHeaders.get(headerName);
@@ -123,7 +118,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
                 }
             }
         }
-
         return headersMap;
     }
 
@@ -150,10 +144,8 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
             isResultReceived = true;
         }
         mListener = null;
-
         super.onDestroy();
     }
-
 
     @SuppressLint("SetJavaScriptEnabled")
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -165,16 +157,13 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
         WebView.setWebContentsDebuggingEnabled(true);
 
         webView.setOnKeyListener(new View.OnKeyListener() {
-
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-
                     if (!isResultReceived) {
                         mListener.hppManagerCancelled();
                         isResultReceived = true;
                     }
-
                     return false;
                 }
                 return false;
@@ -182,7 +171,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
         });
 
         webView.setWebChromeClient(new WebChromeClient() {
-
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
                 if (consoleMessage.message().startsWith(HPPManager.RESULT_MESSAGE)) {
@@ -190,9 +178,7 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
                     callbackHandler(msg, hppManager.getHppURL());
                     return true;
                 }
-
                 return super.onConsoleMessage(consoleMessage);
-
             }
         });
 
@@ -208,7 +194,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
                                          if (url.endsWith("api/auth")) {
                                              checkResult(view);
                                          }
-
                                          super.onLoadResource(view, url);
                                      }
 
@@ -224,7 +209,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
                                                          }
                                                      }
                                                  });
-
                                              }
                                          }, 100);
                                      }
@@ -233,35 +217,28 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
                                      @Override
                                      public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                                          super.onReceivedHttpError(view, request, errorResponse);
-
                                          if (this.url.equals(hppManager.getHppURL())) {
-
                                              isResultReceived = true;
-                                             mListener.hppManagerFailedWithError(new HPPError(errorResponse.getReasonPhrase(), hppManager.getHppURL()));
+                                             onError(new HPPError(errorResponse.getReasonPhrase(), hppManager.getHppURL()));
                                          }
-
                                      }
 
                                      @SuppressLint("NewApi")
                                      @Override
                                      public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                                          super.onReceivedError(view, request, error);
-
                                          isResultReceived = true;
-                                         mListener.hppManagerFailedWithError(new HPPError(error.getDescription().toString(), hppManager.getHppURL()));
-
+                                         onError(new HPPError(error.getDescription().toString(), hppManager.getHppURL()));
                                      }
 
                                      @Override
                                      public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                                          super.onReceivedSslError(view, handler, error);
                                          isResultReceived = true;
-                                         mListener.hppManagerFailedWithError(new HPPError(error.toString(), hppManager.getHppURL()));
-
+                                         onError(new HPPError(error.toString(), hppManager.getHppURL()));
                                      }
                                  }
         );
-
         String resp = new String(((TypedByteArray) response.getBody()).getBytes());
         Type mapType = new TypeToken<Map<String, String>>() {
         }.getType();
@@ -270,7 +247,7 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     }
 
     private HashMap<String, String> getHPPPostData(Map<String, String> params) {
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, String> map = hppManager.getMap();
 
         // default to HPP Version 2
         map.put(HPP_VERSION, "2");
@@ -294,7 +271,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
 
             }
         }
-
         return map;
     }
 
@@ -310,7 +286,7 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
 
                             @Override
                             public void failure(RetrofitError error) {
-                                mListener.hppManagerFailedWithError(new HPPError(error.getMessage(), error, error.getUrl()));
+                                onError(new HPPError(error.getMessage(), error, error.getUrl()));
                             }
                         }
                 );
@@ -330,7 +306,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     public void callbackHandler(String data, String url) {
         if (!isResultReceived && data.length() > 0) {
             isResultReceived = true;
-
             ApiAdapter.getAdapter(getHostPath(hppManager.getHppResponseConsumerURL()), getRequestHeaders())
                     .getConsumerRequest(
                             getRelativePathEncoded(hppManager.getHppResponseConsumerURL()),
@@ -338,39 +313,45 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
                             new Callback<Response>() {
                                 @Override
                                 public void success(Response s, Response response) {
-
                                     String msg = new String(((TypedByteArray) response.getBody()).getBytes());
-
                                     Method[] methods = mListener.getClass().getDeclaredMethods();
-
                                     for (int i = 0; i < methods.length; i++) {
                                         if (methods[i].getName().equals(HPPManagerListener.HPP_MANAGER_COMPLETED_WITH_RESULT)) {
                                             Method method = methods[i];
-
                                             try {
-                                                mListener.hppManagerCompletedWithResult(ApiAdapter.getGson().fromJson(msg, method.getParameterTypes()[0]));
+                                                onSuccess(ApiAdapter.getGson().fromJson(msg, method.getParameterTypes()[0]));
                                             } catch (Exception error) {
-                                                mListener.hppManagerFailedWithError(new HPPError(msg, error, hppManager.getHppResponseConsumerURL()));
+                                                onError(new HPPError(msg, error, hppManager.getHppResponseConsumerURL()));
                                             }
                                             break;
                                         }
                                     }
-
                                 }
 
                                 @Override
                                 public void failure(RetrofitError error) {
-                                    mListener.hppManagerFailedWithError(new HPPError(error.getMessage(), error, error.getUrl()));
+                                    onError(new HPPError(error.getMessage(), error, error.getUrl()));
                                 }
                             }
                     );
-
         }
     }
 
     @Override
     public void failure(RetrofitError error) {
-        mListener.hppManagerFailedWithError(new HPPError(error.getMessage(), error, error.getUrl()));
+        onError(new HPPError(error.getMessage(), error, error.getUrl()));
+    }
+
+    public void onSuccess(Object result) {
+        if (mListener != null) {
+            mListener.hppManagerCompletedWithResult(result);
+        }
+    }
+
+    public void onError(HPPError hppError) {
+        if (mListener != null) {
+            mListener.hppManagerFailedWithError(hppError);
+        }
     }
 
 }

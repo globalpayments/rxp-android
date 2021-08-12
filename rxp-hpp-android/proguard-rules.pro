@@ -15,3 +15,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class com.realexpayments.hpp.** { *; }
+-keep enum com.realexpayments.hpp.** { *; }
+-keepnames class com.realexpayments.hpp.** { *; }
+-keepnames interface com.realexpayments.hpp.** { *; }
+-keep class retrofit.** { *; }

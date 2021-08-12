@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements HPPManagerListene
         setContentView(R.layout.activity_main);
 
         HPPManager hppManager = new HPPManager();
-
         hppManager.setHppRequestProducerURL("https://rxp-hpp-ios.azurewebsites.net/hppRequestProducer.php");
         hppManager.setHppURL("https://pay.sandbox.realexpayments.com/pay");
         hppManager.setHppResponseConsumerURL("https://rxp-hpp-ios.azurewebsites.net/hppResponseConsumer-string.php");
@@ -74,9 +73,8 @@ public class MainActivity extends AppCompatActivity implements HPPManagerListene
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        finish();
                     }
-                })
-                .show();
+                }).show();
     }
+
 }
