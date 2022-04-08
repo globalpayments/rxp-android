@@ -62,6 +62,8 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     private View root;
     private HPPManager hppManager;
     private boolean isResultReceived = false;
+    private Response hppResponseTry;
+    private Response responseTry;
 
     public HPPManagerFragment() {
     }
@@ -101,7 +103,7 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
                 onError(new HPPError("Invalid arguments", null));
             }
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(activity
                     + " must implement HPPManagerListener");
         }
     }
@@ -141,7 +143,6 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     public void onDestroy() {
         if (!isResultReceived) {
             mListener.hppManagerCancelled();
-            isResultReceived = true;
         }
         mListener = null;
         super.onDestroy();
@@ -151,6 +152,8 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void success(Response hppResponse, Response response) {
+        hppResponseTry = hppResponse;
+        responseTry = response;
         final WebView webView = root.findViewById(R.id.hpp_web_view);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(this, JS_WEBVIEW_OBJECT_NAME);
@@ -159,8 +162,9 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
         webView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
                     if (!isResultReceived) {
+                        webView.goBack();
                         mListener.hppManagerCancelled();
                         isResultReceived = true;
                     }
@@ -243,7 +247,11 @@ public class HPPManagerFragment extends Fragment implements Callback<Response> {
         Type mapType = new TypeToken<Map<String, String>>() {
         }.getType();
         Map<String, String> consumerResponseParams = new Gson().fromJson(resp, mapType);
-        postHPPData(webView, getHPPPostData(consumerResponseParams));
+        if (resp.isEmpty()) {
+            success(hppResponse, response);
+        } else {
+            postHPPData(webView, getHPPPostData(consumerResponseParams));
+        }
     }
 
     private HashMap<String, String> getHPPPostData(Map<String, String> params) {

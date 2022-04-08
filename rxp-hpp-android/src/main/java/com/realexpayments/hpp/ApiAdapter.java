@@ -3,12 +3,15 @@ package com.realexpayments.hpp;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.AndroidLog;
+import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -19,9 +22,16 @@ class ApiAdapter {
     public static final String RETROFIT_TAG = "HPPRetrofit";
 
     public static IHPPServerAPI getAdapter(String endpoint, Map<String, String> headers) {
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(1, TimeUnit.MINUTES);
+        okHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
+        okHttpClient.setWriteTimeout(15, TimeUnit.SECONDS);
+
         RestAdapter.Builder builderRestAdapter =
                 new RestAdapter
                         .Builder()
+                        .setClient(new OkClient(okHttpClient))
                         .setEndpoint(endpoint)
                         .setConverter(new GsonConverter(getGson()))
                         .setRequestInterceptor(getRequestInterceptor(headers));
