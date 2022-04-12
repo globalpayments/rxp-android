@@ -5,9 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The main object the host app creates.
