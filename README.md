@@ -11,16 +11,18 @@ You can find more information on how to use this SDK and sign up for a free Real
 ### Gradle users
 Add this dependency to your project's build file:
 ```
-compile "com.realexpayments.hpp.sdk:rxp-hpp-android:2.0"
+compile "com.realexpayments.hpp.sdk:rxp-hpp-android:2.3"
 ```
 
 ### Maven users
 Add this dependency to your project's POM:
+
 ```xml
+
 <dependency>
-  <groupId>com.realexpayments.hpp.sdk</groupId>
-  <artifactId>rxp-hpp-android</artifactId>
-  <version>2.0</version>
+    <groupId>com.realexpayments.hpp.sdk</groupId>
+    <artifactId>rxp-hpp-android</artifactId>
+    <version>2.3</version>
 </dependency>
 ```
 
@@ -94,11 +96,12 @@ You can implement the following methods specified in HPPManagerListener to recei
 Insert the HppManager fragment into your activity as follows:
 
 ```
+
 Fragment hppManagerFragment = hppManager.newInstance();
-	getSupportFragmentManager()    
-        .beginTransaction()      
-        .add(R.id.container,hppManagerFragment)      
-        .commit()
+getSupportFragmentManager()    
+.beginTransaction()      
+.add(R.id.container,hppManagerFragment)      
+.commit()
 ```
 
 Executing this code, HPP Manager will process the given parameters, get the request from the server, send the encoded request to HPP and present the form received back.
@@ -155,7 +158,9 @@ hppManager = hppManager.createFromBundle(args);
 Realex Payments maintain separate endpoints for live and test transactions. You’ll need to override the HPP URL in the SDK to facilitate testing. Use the code below:
 
 ```
+
 hppManager.setHppURL("https://pay.sandbox.realexpayments.com/pay";
+
 ```		
 
 ## Remote API Validation Library Installation
@@ -163,7 +168,9 @@ hppManager.setHppURL("https://pay.sandbox.realexpayments.com/pay";
 ### Gradle users
 Add this dependency to your project's build file:
 ```
-compile "com.realexpayments.remote.sdk:rxp-remote-android:2.0"
+
+compile "com.realexpayments.remote.sdk:rxp-remote-android:2.3"
+
 ```
 
 ### Maven users
@@ -172,7 +179,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.realexpayments.remote.sdk</groupId>
   <artifactId>rxp-remote-android</artifactId>
-  <version>2.0</version>
+  <version>2.3</version>
 </dependency>
 ```
 
