@@ -1,0 +1,113 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+ext {
+    publishedGroupId = 'com.realexpayments.hpp.sdk'
+    libraryName = 'rxp-hpp-android'
+    artifact = 'rxp-hpp-android'
+
+    libraryDescription = 'The official Realex Payments Android SDK for HPP and Remote API.'
+
+    siteUrl = 'https://developer.realexpayments.com'
+    gitUrl = 'https://github.com/realexpayments/rxp-android.git'
+
+    libraryVersion = '2.3'
+
+    developerId = 'realexpayments'
+    developerName = 'Realex Payments'
+    developerEmail = 'developers@realexpayments.com'
+
+    licenseName = 'The MIT License (MIT)'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
+task androidJavadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompileProvider.get().classpath
+        }
+    }
+
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+    options.encoding 'utf-8'
+    options {
+        addStringOption 'docencoding', 'utf-8'
+        addStringOption 'charset', 'utf-8'
+        links 'https://docs.oracle.com/javase/7/docs/api/'
+        links 'https://d.android.com/reference'
+        links 'https://developer.android.com/reference/androidx/'
+    }
+}
+
+task androidJavadocJar(type: Jar, dependsOn: androidJavadoc) {
+    archiveClassifier.set('javadoc')
+    from androidJavadoc.destinationDir
+
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+task javaSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+
+                from components.release
+
+                groupId = publishedGroupId
+                artifactId = artifact
+                version = libraryVersion
+
+                pom {
+                    name = libraryName
+                    description = libraryDescription
+                    url = siteUrl
+                    licenses {
+                        license {
+                            name = licenseName
+                            url = licenseUrl
+                        }
+                    }
+                    scm {
+                        connection = gitUrl
+                        developerConnection = gitUrl
+                        url = siteUrl
+                    }
+                    developers {
+                        developer {
+                            id = developerId
+                            name = developerName
+                            email = developerEmail
+                        }
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                name = "MavenCentral"
+                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+                credentials {
+                    username ext.find("mavenCentralRepoUsername")
+                    password ext.find("mavenCentralRepoPassword")
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}
