@@ -12,7 +12,19 @@ allprojects {
     repositories {
         google()
         jcenter()
+    }
 
+    def propertiesFile = file("publish.properties")
+    if (propertiesFile.exists()) {
+        def props = new Properties()
+        propertiesFile.withInputStream { props.load(it) }
+        ext {
+            setProperty("signing.keyId", props["signing.keyId"])
+            setProperty("signing.password", props["signing.password"])
+            setProperty("signing.secretKeyRingFile", props["signing.secretKeyRingFile"])
+            setProperty("mavenCentralRepoUsername", props["mavenCentralRepoUsername"])
+            setProperty("mavenCentralRepoPassword", props["mavenCentralRepoPassword"])
+        }
     }
 }
 

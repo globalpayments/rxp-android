@@ -4,6 +4,13 @@ android {
     compileSdk 34
     namespace "com.realexpayments.hpp"
 
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
+        }
+    }
+
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 34
@@ -27,3 +34,5 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.7.2'
     implementation 'org.apache.httpcomponents:httpcore:4.4.16'
 }
+
+apply from: 'publish-package.gradle'
